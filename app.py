@@ -54,9 +54,15 @@ if st.button("고장 예측하기"):
         "Tool wear [min]": wear
     }])
 
-    model = model_rf if model_name == "랜덤 포레스트" else model_lr
-    failure_index = list(model.classes_).index(1)
-    score = model.predict_proba(X)[0][failure_index]
+  model = model_rf if model_name == "랜덤 포레스트" else model_lr
+
+X = X.reindex(
+    columns=model.feature_names_in_,
+    fill_value=0
+)
+
+failure_index = list(model.classes_).index(1)
+score = model.predict_proba(X)[0][failure_index]
 
     st.metric("모델의 고장 점수", f"{score * 100:.1f}%")
 
